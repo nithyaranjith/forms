@@ -1,5 +1,6 @@
-<h1>Reactive Form</h1>
+
 <form [formGroup]="myform" (ngSubmit)="submitform()" class="reactive-form">
+  <h1>Reactive Form</h1>
   <div>
     <input formControlName="name" type="text" name="name" placeholder="enter name">
     <ng-container *ngIf="myform.controls.name.touched">
@@ -81,10 +82,11 @@
   </div>
 </form>
 
-<!-- Template Driven Form -->
+<!--*************** Template Driven Form **************-->
 
-<h1>Template Driven Form</h1>
+
 <form #templateForm="ngForm" (ngSubmit)="submitdata()" class="template-form">
+  <h1>Template Driven Form</h1>
   <div>
     <input type="text" #nameCtrl="ngModel" placeholder="Enter name" name="FirstName" [(ngModel)]="mydata.FirstName"
       required>
@@ -96,11 +98,17 @@
   </div>
   <div>
     <input [type]="show? 'text':'password'" #pwdctl="ngModel" placeholder="Enter password1 " name="password1"
-      [(ngModel)]="mydata.password1" required pattern="[a-zA-Z]+">
+      [(ngModel)]="mydata.password1" required minlength="6" pattern="[a-zA-Z]*">
     <ng-container *ngIf="pwdctl.touched">
       <span *ngIf="pwdctl.errors?.['required']">
         please fill the password1
-      </span>
+      </span> <br>
+      <span *ngIf="pwdctl.errors?.['minlength']">
+name must be 6 character
+      </span> <br>
+      <span *ngIf="pwdctl.errors?.['pattern']">
+        name must be alphapets
+              </span>
 
     </ng-container>
   </div>
