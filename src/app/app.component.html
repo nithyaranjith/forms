@@ -1,4 +1,3 @@
-
 <form [formGroup]="myform" (ngSubmit)="submitform()" class="reactive-form">
   <h1>Reactive Form</h1>
   <div>
@@ -104,11 +103,11 @@
         please fill the password1
       </span> <br>
       <span *ngIf="pwdctl.errors?.['minlength']">
-name must be 6 character
+        name must be 6 character
       </span> <br>
       <span *ngIf="pwdctl.errors?.['pattern']">
         name must be alphapets
-              </span>
+      </span>
 
     </ng-container>
   </div>
