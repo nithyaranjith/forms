@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -13,41 +13,54 @@ import { FormArray, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Va
 export class AppComponent {
   title = 'forms';
 
-  myform = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z]*'), Validators.minLength(6)]),
-    DOB: new FormControl(''),
-    passwordvisibility: new FormControl(''),
-    // skills: new FormArray([
-    //   new FormControl('add1'),
-    //   new FormControl('add2'),
-    // ]),
-    address: new FormArray([
-      new FormControl('add1'),
-      new FormControl('add2')
-    ]),
-  });
+  myform: FormGroup;
 
-  // getSkillsFromArray(){
-  //  return this.myform.get('skills') as FormArray;
-  // }
+  constructor(private fb: FormBuilder) {
+    this.myform = this.fb.group({
+      name: this.fb.control('', [Validators.required]),
+      email: this.fb.control('', [Validators.required]),
+      password: this.fb.control('', [Validators.required, Validators.pattern('[a-zA-Z]*'), Validators.minLength(6)]),
+      DOB: this.fb.control(''),
+      passwordvisibility: this.fb.control(''),
+      address: this.fb.array([
+        this.fb.group({
+          doorno: ['', Validators.required],
+          street: ['', Validators.required]
+        })
+      ])
+    });
+
+  }
+
+  // myform = new FormGroup({
+  //   name: new FormControl('', [Validators.required]),
+  //   email: new FormControl('', [Validators.required]),
+  //   password: new FormControl('', [Validators.required, Validators.pattern('[a-zA-Z]*'), Validators.minLength(6)]),
+  //   DOB: new FormControl(''),
+  //   passwordvisibility: new FormControl(''),
+
+  //   address: new FormArray([
+  //     new FormControl('add1'),
+  //     new FormControl('add2')
+  //   ]),
+  // });
+
+
   getAddressFormArray() {
     return this.myform.get('address') as FormArray;
 
   }
-  // addform(){
-  //   this.getSkillsFromArray().push(new FormControl('add'))
-  // }
+
   addForm() {
-    this.getAddressFormArray().push(new FormControl('add'))
+    this.getAddressFormArray().push(this.fb.group({
+      doorno: ['', Validators.required],
+      street: ['', Validators.required]
+    }));
+    // this.getAddressFormArray().push(new FormControl('add'))
     this.myform.valueChanges.subscribe((res) => {
       console.log(res);
     })
   }
-  // removeForm(index:number){
-  //   this.getSkillsFromArray().removeAt(index)
-  // }
   removeForm(index: number) {
     this.getAddressFormArray().removeAt(index, {
       emitEvent: true

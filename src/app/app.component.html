@@ -2,40 +2,39 @@
   <h1>Reactive Form</h1>
   <div>
     <input formControlName="name" type="text" name="name" placeholder="enter name">
-    <ng-container *ngIf="myform.controls.name.touched">
-      <span *ngIf="myform.controls.name.errors?.['required']">
-        pleasefill this name filed
+    <ng-container *ngIf="myform.get('name')?.touched">
+      <span *ngIf="myform.get('name')?.errors?.['required']">
+        Please fill this name field
       </span>
     </ng-container>
   </div>
   <div>
     <input formControlName="email" type="email" name="email" placeholder="Enter email">
-    <ng-container *ngIf="myform.controls.email.touched">
-      <span *ngIf="myform.controls.email.errors?.['required']">
-        pleasefill this email filed
+    <ng-container *ngIf="myform.get('email')?.touched">
+      <span *ngIf="myform.get('email')?.errors?.['required']">
+        Please fill this email field
       </span>
     </ng-container>
   </div>
   <div>
-    <input formControlName="password" [type]="myform.controls.passwordvisibility.value === 'show' ?'text':'password'"
+    <input formControlName="password" [type]="myform.get('passwordvisibility')?.value === 'show' ? 'text' : 'password'"
       name="password" placeholder="Enter password">
-    <ng-container *ngIf="myform.controls.password.touched">
-      <span *ngIf="myform.controls.email.errors?.['required']">
-        pleasefill this password filed
-      </span> <br>
-      <span *ngIf="myform.controls.password.errors?.['minlength']">
-        password should be atleast{{myform.controls.password.errors?.['minlength']?.requiredLength}}character
+    <ng-container *ngIf="myform.get('password')?.touched">
+      <span *ngIf="myform.get('password')?.errors?.['required']">
+        Please fill this password field
       </span>
-      <span *ngIf="myform.controls.password.errors?.['pattern']">
-        password only alphapets
-
+      <br>
+      <span *ngIf="myform.get('password')?.errors?.['minlength']">
+        Password should be at least {{ myform.get('password')?.errors?.['minlength']?.requiredLength }} characters
+      </span>
+      <span *ngIf="myform.get('password')?.errors?.['pattern']">
+        Password should only contain alphabets
       </span>
     </ng-container>
   </div>
   <div>
     <input formControlName="DOB" type="date" name="DOB" placeholder="Enter DOB">
   </div>
-
   <div>
     <label>ShowPassword
       <input type="radio" value="show" formControlName="passwordvisibility">
@@ -45,44 +44,37 @@
     </label>
   </div>
   <div>
-    <!-- <div formArrayName="skills" class="skill">
-      <div class="add" *ngFor="let x of getSkillsFromArray().controls; index as i">
-        <input f[ormControlName]="i" name="writing" placeholder="Enter skill">
-        <button type="button" (click)="addform()">add</button>
-        <button type="button" (click)="removeForm(i)">remove</button>
-      </div>
-      
-
-    </div> -->
     <div formArrayName="address">
-      <div class="add1" *ngFor="let x of getAddressFormArray().controls; index as i">
-        <input [formControlName]="i" name="address" placeholder="enter address" type="text">
+      <div class="add1" *ngFor="let x of getAddressFormArray().controls; let i = index">
+        <div [formGroupName]="i">
+          <div></div>
+          <input formControlName="doorno" name="doorno" placeholder="enter doorno" type="text">
+          <input formControlName="street" name="street" placeholder="enter street" type="text">
+        </div>
         <button type="button" (click)="addForm()">add</button>
         <button type="button" (click)="removeForm(i)">remove</button>
       </div>
     </div>
     <div (click)="submitform()">
-
-      <button [disabled]="myform.invalid">submit{{myform.invalid}}
+      <button [disabled]="myform.invalid">submit{{ myform.invalid }}
       </button>
     </div>
   </div>
   <div class="error">
-    {{myform.controls.name.errors| json}}
+    {{ myform.get('name')?.errors | json }}
   </div>
   <div class="error">
-    {{myform.controls.email.errors|json}}
+    {{ myform.get('email')?.errors | json }}
   </div>
   <div class="error">
-    {{myform.controls.password.errors|json}}
+    {{ myform.get('password')?.errors | json }}
   </div>
   <div class="error">
-    {{myform.controls.passwordvisibility.errors|json}}
+    {{ myform.get('passwordvisibility')?.errors | json }}
   </div>
 </form>
 
 <!--*************** Template Driven Form **************-->
-
 
 <form #templateForm="ngForm" (ngSubmit)="submitdata()" class="template-form">
   <h1>Template Driven Form</h1>
@@ -108,7 +100,6 @@
       <span *ngIf="pwdctl.errors?.['pattern']">
         name must be alphapets
       </span>
-
     </ng-container>
   </div>
   <div (click)=" password()">
